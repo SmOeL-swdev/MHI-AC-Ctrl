@@ -8,6 +8,8 @@
 
 #define WIFI_PASSWORD "APPASSWORD"
 #define HOSTNAME "MHI-AC"
+#define FW_USER "firmware"
+#define FW_PASSWORD "password"
 
 #define WiFI_SEARCHStrongestAP false                 // when false then the first WiFi access point with matching SSID found is used.
                                                     // when true then the strongest WiFi access point with matching SSID found is used, it doesn't work with hidden SSID

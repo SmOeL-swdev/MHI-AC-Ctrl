@@ -4,10 +4,12 @@
 #include "MHI-AC-Ctrl-core.h"
 #include "MHI-AC-Ctrl.h"
 #include "support.h"
+#include "MHI-WebServer.h"
 
 
 MHI_AC_Ctrl_Core mhi_ac_ctrl_core;
 POWER_STATUS power_status = unknown;
+WServer myWebServer;
 
 unsigned long room_temp_set_timeout_Millis = millis();
 bool troom_was_set_by_MQTT = false;
@@ -398,7 +400,7 @@ void setup() {
   delay(100);
   Serial.println();
   Serial.print("Starting MHI-AC-Ctrl ");
-  Serial.printf_P(PSTR("version: %lu\n"), VERSION);
+  //Serial.printf_P(PSTR("version: %lu\n"), VERSION); not yet figured out if we need to print this here... future update?
   Serial.printf_P(PSTR("CPU frequency[Hz]=%lu\n"), F_CPU);
   Serial.printf("ESP.getCoreVersion()=%s\n", ESP.getCoreVersion().c_str());
   Serial.printf("ESP.getSdkVersion()=%s\n", ESP.getSdkVersion());
@@ -409,7 +411,7 @@ void setup() {
 #endif
   initWiFi();
   MeasureFrequency();
-  setupOTA();
+  //setupOTA();
   MQTTclient.setServer(MQTT_SERVER, MQTT_PORT);
   MQTTclient.setCallback(MQTT_subscribe_callback);
   mhi_ac_ctrl_core.MHIAcCtrlStatus(&mhiStatusHandler);
@@ -417,15 +419,14 @@ void setup() {
   // mhi_ac_ctrl_core.set_fan(7); // set fan AUTO, see https://github.com/absalom-muc/MHI-AC-Ctrl/issues/99
   String IPmessage = "IP Address: " ;
   Serial.println(IPmessage + WiFi.localIP().toString());
+  myWebServer.Init();
   Serial.println("Setup done..."); 
   previousMillis = millis();
 }
 
 
 void loop() {
-  Serial.print("WiFi Status: ");
-  Serial.println(WiFi.status());
-
+  
 
   if (!WiFi.isConnected()){
     Serial.println("No Wi-Fi Connection, restarting...");
@@ -434,13 +435,14 @@ void loop() {
   }
   else {
     //Serial.printf("loop: WiFi.status()=%i\n", WiFi.status()); // see https://realglitch.com/2018/07/arduino-wifi-status-codes/
-    Serial.println("Checking MQTT");
+    myWebServer.Handle();
     MQTTStatus=MQTTreconnect();
     if (MQTTStatus == MQTT_RECONNECTED){
       Serial.println("Resetting old values MHI");
       mhi_ac_ctrl_core.reset_old_values();  // after a reconnect.
     }
     //ArduinoOTA.handle();
+    
   }
 
   
