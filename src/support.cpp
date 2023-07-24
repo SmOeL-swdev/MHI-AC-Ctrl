@@ -89,11 +89,10 @@ int MQTTreconnect() {
     }
 
     if (MQTTclient.connect(HOSTNAME, MQTT_USER, MQTT_PASSWORD, MQTT_PREFIX TOPIC_CONNECTED, 0, true, PAYLOAD_CONNECTED_FALSE)) {
-      Serial.println(F(" connected"));
+      Serial.println((" connected"));
       Serial.printf("MQTTclient.connected=%i\n", MQTTclient.connected());
       reconnect_trials=0;
       output_P((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
-      Serial.println("And now here");
       output_P((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
 
       itoa(WiFi.RSSI(), strtmp, 10);
@@ -211,39 +210,3 @@ void setup_ds18x20() {
 }
 #endif
 
-void setupOTA() {
-  ArduinoOTA.setHostname(OTA_HOSTNAME);
-  if (strcmp(OTA_PASSWORD, "") != 0)
-    ArduinoOTA.setPassword(OTA_PASSWORD);
-
-  ArduinoOTA.onStart([]() {
-    String type;
-    if (ArduinoOTA.getCommand() == U_FLASH)
-      type = "sketch";
-    else // U_SPIFFS
-      type = "filesystem";
-    // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-    Serial.println("Start updating " + type);
-  });
-  ArduinoOTA.onEnd([]() {
-    Serial.println(F("\nEnd"));
-  });
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf_P(PSTR("Progress: %u%%\n"), (progress / (total / 100)));
-  });
-  ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf_P(PSTR("Error[%u]: %i\n"), error);
-    if (error == OTA_AUTH_ERROR)
-      Serial.println(F("Auth Failed"));
-    else if (error == OTA_BEGIN_ERROR)
-      Serial.println(F("Begin Failed"));
-    else if (error == OTA_CONNECT_ERROR)
-      Serial.println(F("Connect Failed"));
-    else if (error == OTA_RECEIVE_ERROR)
-      Serial.println(F("Receive Failed"));
-    else if (error == OTA_END_ERROR)
-      Serial.println(F("End Failed"));
-  });
-  ArduinoOTA.begin();
-  Serial.println(F("OTA Ready"));
-}

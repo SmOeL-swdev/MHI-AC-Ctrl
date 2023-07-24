@@ -411,7 +411,6 @@ void setup() {
 #endif
   initWiFi();
   MeasureFrequency();
-  //setupOTA();
   MQTTclient.setServer(MQTT_SERVER, MQTT_PORT);
   MQTTclient.setCallback(MQTT_subscribe_callback);
   mhi_ac_ctrl_core.MHIAcCtrlStatus(&mhiStatusHandler);
