@@ -27,11 +27,13 @@ Part |Value            |Package                    |comment
 R1   |4k7              |R-EU_0207/10       
 X3   |JST-XH-03        |JST-XH-03-PACKAGE-LONG-PAD |consider the polarity
 
-## Assembled PCB
+## Assembled PCB And breadboard
 The following photos show the assembled PCB (without R1 and X1, which are used in context of DS18x20 only).
 <img src="images/Assembled-Board-top1.jpg" width=300/>
 <img src="images/Assembled-Board-top2.jpg" width=300/>
 <img src="images/Assembled-Board-bottom.jpg" width=300/>
+<img src="images/BreadBoardTop.jpg" width=300/>
+<img src="images/BreadBoardBottom.jpg" width=300/>
 
 # PCB (KiCad)
 User [oliv3r](https://github.com/oliv3r) converted the eagle model to KiCad, see [here](kicad).   

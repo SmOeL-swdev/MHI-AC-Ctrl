@@ -1,6 +1,6 @@
 # MHI-AC-Ctrl
 Reads and writes data (e.g. power, mode, fan status etc.) from/to a Mitsubishi Heavy Industries (MHI) air conditioner (AC) via SPI controlled by MQTT. The AC is the SPI master and the ESP8266 is the SPI slave.
-
+Repo is cloned and forked from previous builds and Platform IO enabled.
 <img src="/images/IoT-MQTT-Panel.jpg" width=200 align="right" />
 
 # Attention:
@@ -44,17 +44,16 @@ The ESP8266 SPI signals SCL (SPI clock), MOSI (Master Out Slave In) and MISO (Ma
 More details are described in [Hardware.md](Hardware.md).
 
 ## Software:
-The program uses the following libraries
+The program uses the following libraries (These are set in lib_deps of the pio.ini 
  - :warning:[MQTT client library](https://github.com/knolleary/pubsubclient) - please don't use v2.8.0! (because of this [issue](https://github.com/knolleary/pubsubclient/issues/747)). Better use v2.7.0:warning:
- - [ArduinoOTA](https://github.com/esp8266/Arduino/tree/master/libraries/ArduinoOTA) (might be removed in future)
+ - Webserver is running for OTA.
  
 and optionally you need for the use of an external temperature sensor DS18x20 the libraries
  - [OneWire](https://www.pjrc.com/teensy/td_libs_OneWire.html)
  - [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
 
-Please check the GitHub pages to see how to install them (usually via tools -> libraries).
-
-Create a sub-directory "MHI-AC-Ctrl" and copy the files from the latest [release](https://github.com/absalom-muc/MHI-AC-Ctrl/releases) src directory in your MHI-AC-Ctrl sub-directory. You could also use the recently updated version in the [src folder](src) but with the risk that it is more unstable. The stability of the program is better when you compile it for a CPU frequency of 160MHz.
+Clone the project and run 'pio run'
+You could also use the recently updated version in the [src folder](src) but with the risk that it is more unstable. The stability of the program is better when you compile it for a CPU frequency of 160MHz.
 The configuration options are described in [SW-Configuration.md](SW-Configuration.md).
 
 In a previous version (see [here](https://github.com/absalom-muc/MHI-AC-SPY)) I used the Hardware-SPI of the ESP8266. But since the SPI documentation of ESP8266 is poor, I decided to switch to a Software based SPI.
