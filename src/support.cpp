@@ -61,6 +61,16 @@ void MeasureFrequency() {  // measure the frequency on the pins
   }
   else {
     Serial.println(F("out of range!"));
+    Serial.println(F("setting internal pullups and retry:"));
+    pinMode(MISO_PIN, OUTPUT);
+    pinMode(MISO_PIN, LOW);
+    pinMode(MISO_PIN, INPUT);
+    pinMode(MISO_PIN, INPUT_PULLUP);
+    Serial.printf("MISO frequency=%iHz (expected: ~0Hz) ", rising_edge_cnt.MISO);
+    if (rising_edge_cnt.MISO <= 10) {
+      Serial.println(F("o.k."));
+      delay(5000);
+    }
     while (1);
   }
 }
