@@ -475,7 +475,7 @@ void loop() {
   if((MQTTStatus==MQTT_RECONNECTED) || (MQTTStatus==MQTT_CONNECT_OK)){
 #endif    
     //Serial.println("MQTT connected in main loop");
-    int ret = mhi_ac_ctrl_core.loop(80);
+    int ret = mhi_ac_ctrl_core.loop(60);
     if (ret < 0)
       Serial.printf_P(PSTR("mhi_ac_ctrl_core.loop error: %i\n"), ret);
 #ifndef CONTINUE_WITHOUT_MQTT 

@@ -32,9 +32,9 @@ const byte opdata[][2] PROGMEM = {
 #define minTimeInternalTroom 5000              // minimal time in ms used for Troom internal sensor changes for publishing to avoid jitter 
 
 // pin defintions
-#define SCK_PIN  14
-#define MOSI_PIN 13
-#define MISO_PIN 12
+#define SCK_PIN  14  //WEMOS D5
+#define MOSI_PIN 13  //WEMOS D7
+#define MISO_PIN 16  //Orignally connect to [12] WEMOS D6 | This caused same frequency at SPI-measure frequency as MOSI pin
 
 // constants for the frame
 #define SB0 0

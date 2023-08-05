@@ -61,6 +61,7 @@ void MeasureFrequency() {  // measure the frequency on the pins
   }
   else {
     Serial.println(F("out of range!"));
+    delay(1000);
     while (1);
   }
 }
