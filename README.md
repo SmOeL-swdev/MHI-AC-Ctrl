@@ -3,7 +3,7 @@ This version/fork of MHI-AC-Ctrl is specificly setup for MQTT in combination wit
 Reads and writes data (e.g. power, mode, fan status etc.) from/to a Mitsubishi Heavy Industries (MHI) air conditioner (AC) via SPI controlled by MQTT. The AC is the SPI master and the ESP8266 is the SPI slave.
 Repo is cloned and forked from previous builds and Platform IO enabled. This makes all dependencies and build flags static in the project and more reproduceable on other machines.
 
-<img src="/images/HA-MHI-CTRL_Settings.png" width=200 align="left" />
+<img src="/images/HA-MHI-CTRL_Settings.png" width=400 align="left" />
 
 # Attention:
 :warning: You have to open the indoor unit to have access to the SPI. Opening of the indoor unit should be done by 
