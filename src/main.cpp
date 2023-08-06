@@ -157,8 +157,10 @@ void MQTT_subscribe_callback(const char* topic, byte* payload, unsigned int leng
     else
       publish_cmd_invalidparameter();
   }
-  else
+  else{
     publish_cmd_unknown();
+  }
+  //After this incredible else-if-else spaghetti we might want to update all pub-topics so that all listners are synced again! <-- with regards, SmOel
 }
 
 class StatusHandler : public CallbackInterface_Status {
