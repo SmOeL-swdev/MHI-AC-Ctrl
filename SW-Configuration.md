@@ -124,12 +124,6 @@ The readout of last error operating data is triggered by publishing *ErrOpData* 
 
 note: The topic and the payload text is adaptable by defines in [MHI-AC-Ctrl.h](src/MHI-AC-Ctrl.h)
 
-## OTA Settings ([support.h](src/support.h))
-OTA (Over the Air) update is the process of loading the firmware to ESP module using Wi-Fi connection rather than a serial port.
-The OTA hostname can be adapted, per default it is the hostname used by WiFi.
-```
-#define OTA_HOSTNAME HOSTNAME     // default for the OTA_HOSTNAME is the HOSTNAME
-#define OTA_PASSWORD ""           // Enter an OTA password if required
 ```
 ## External Temperature Sensor Settings ([support.h](src/support.h))
 When an external temperature sensor is connected, you can configure the pin where DQ of the the DS18x20 is connected, default is Pin 4 (D2)
