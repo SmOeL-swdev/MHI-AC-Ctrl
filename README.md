@@ -54,7 +54,7 @@ Clone the project and run 'pio run'
 You could also use the recently updated version in the [src folder](src) but with the risk that it is more unstable. The stability of the program is better when it is compiled for a CPU frequency of 160MHz.
 The configuration options are described in [SW-Configuration.md](SW-Configuration.md).
 
-In a previous version the HW-MISO pin seems to have crosstalk, this is solved by setting the MISO to GPIO16
+In a previous version and/or certain ESP chip/module versions, the HW-MISO pin seems to have crosstalk, this is solved by setting the MISO to GPIO16
 This Software based SPI is reliable and the performance of the ESP8266 is sufficient for this use case.
 In case of problems please check the [Troubleshooting guide](Troubleshooting.md).
 

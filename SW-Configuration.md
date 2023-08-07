@@ -50,7 +50,7 @@ If you want to use MQTT authentication enter user name and password:
 #define MQTT_USER ""          // if authentication is not used, leave it empty
 #define MQTT_PASSWORD ""      // if authentication is not used, leave it empty
 ```
-note: TLS/SSL is not supported
+note: TLS/SSL is not supported yet
 
 The following sections show the configuration for the MQTT pathes.
 ### MQTT status
@@ -109,7 +109,7 @@ The path to the operating data topic can be adapted.
 #define MQTT_OP_PREFIX "OpData/"    // prefix for publishing operating data
 ```
 
-Without changes of the path, subscribe to *MHI-AC-Ctrl/OpData/#* for receiving all operating data. Please see section [Operating data](#operating-data-mhi-ac-ctrl-coreh) to find all supported operating data.
+Without changes of the path, subscribe to *MHI-AC/OpData/#* for receiving all operating data. Please see section [Operating data](#operating-data-mhi-ac-ctrl-coreh) to find all supported operating data.
 
 note: The topic and the payload text is adaptable by defines in [MHI-AC-Ctrl.h](src/MHI-AC-Ctrl.h)
 
@@ -271,7 +271,7 @@ void reset_old_values();              // resets the 'old' variables ensuring tha
 int loop(uint max_time_ms);           // receive / transmit a frame of 20 bytes
 void set_power(boolean power);        // power on/off the AC
 void set_mode(ACMode mode);           // change AC mode (e.g. heat, dry, cool etc.)
-void set_tsetpoint(uint tsetpoint);   // set the target temperature of the AC)
+void set_tsetpoint(uint tsetpoint);   // set the target temperature of the AC
 void set_fan(uint fan);               // set the requested fan speed
 void set_vanes(uint vanes);           // set the vanes horizontal position (or swing)
 void set_troom(byte temperature);     // set the room temperature used by AC
