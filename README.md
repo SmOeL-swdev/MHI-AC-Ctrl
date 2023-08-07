@@ -1,4 +1,4 @@
-# MHI-AC-Ctrl for Home Assistant with better Ext. Sensors
+# MHI-AC-Ctrl for Home Assistant with better Temp./Hum. Sensors
 This version/fork of MHI-AC-Ctrl is specificly setup for MQTT in combination with Home-assistant.
 Reads and writes data (e.g. power, mode, fan status etc.) from/to a Mitsubishi Heavy Industries (MHI) air conditioner (AC) via SPI controlled by MQTT. The AC is the SPI master and the ESP8266 is the SPI slave.
 Repo is cloned and forked from previous builds and Platform IO enabled. This makes all dependencies and build flags static in the project and more reproduceable on other machines.
