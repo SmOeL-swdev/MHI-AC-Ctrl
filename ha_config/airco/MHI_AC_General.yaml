@@ -1,0 +1,73 @@
+- name: "MHI-AC"
+  unique_id: MHI_Kamer
+  initial: 20
+  min_temp: 18
+  max_temp: 30
+  modes:
+    - "auto"
+    - "dry"
+    - "cool"
+    - "fan_only"
+    - "heat"
+    - "off"
+  swing_modes:
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "swing"
+  fan_modes:
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "Auto"
+  power_command_topic: "MHI-AC/set/Power"
+ # payload_on: "On"
+ # payload_off: "Off"
+  power_state_topic: "MHI-AC/Power"
+ # payload_on: "On"
+ # payload_off: "Off"
+  mode_command_topic: "MHI-AC/set/Mode"
+  mode_command_template: >
+    {% if value == "auto" %}
+        Auto 
+    {% elif value == "dry" %} 
+        Dry
+    {% elif value == "cool" %} 
+        Cool
+    {% elif value == "fan_only" %} 
+        Fan
+    {% elif value == "heat" %} 
+        Heat
+    {% elif value == "off" %} 
+        Off
+    {% else %}
+        -1
+    {% endif %}
+  mode_state_topic: "MHI-AC/Mode"
+  mode_state_template: > 
+    {% if value == "Auto" %}
+        auto 
+    {% elif value == "Dry" %} 
+        dry
+    {% elif value == "Cool" %} 
+        cool
+    {% elif value == "Fan" %} 
+        fan_only
+    {% elif value == "Heat" %} 
+        heat
+    {% elif value == "Off" %} 
+        off
+    {% else %}
+        -1
+    {% endif %}
+  temperature_command_topic: "MHI-AC/set/Tsetpoint"
+  temperature_state_topic: "MHI-AC/Tsetpoint"
+  fan_mode_command_topic: "MHI-AC/set/Fan"
+  fan_mode_state_topic: "MHI-AC/Fan"
+  swing_mode_command_topic: "MHI-AC/set/Vanes"
+  swing_mode_state_topic: "MHI-AC/Vanes"
+  current_temperature_topic: "MHI-AC/Troom"
+  precision: 0.1
+ 
