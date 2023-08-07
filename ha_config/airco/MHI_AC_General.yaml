@@ -23,11 +23,11 @@
     - "4"
     - "Auto"
   power_command_topic: "MHI-AC/set/Power"
-  payload_on: "On"
-  payload_off: "Off"
+ # payload_on: "On"
+ # payload_off: "Off"
   power_state_topic: "MHI-AC/Power"
-  payload_on: "On"
-  payload_off: "Off"
+ # payload_on: "On"
+ # payload_off: "Off"
   mode_command_topic: "MHI-AC/set/Mode"
   mode_command_template: >
     {% if value == "auto" %}
@@ -45,7 +45,6 @@
     {% else %}
         -1
     {% endif %}
-  
   mode_state_topic: "MHI-AC/Mode"
   mode_state_template: > 
     {% if value == "Auto" %}
