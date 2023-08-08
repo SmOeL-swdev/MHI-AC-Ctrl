@@ -81,6 +81,10 @@ void MHI_AC_Ctrl_Core::request_ErrOpData() {
   request_erropData = true;
 }
 
+void MHI_AC_Ctrl_Core::request_OpData(){
+  request_OpStatus = true;
+}
+
 void MHI_AC_Ctrl_Core::set_troom(byte troom) {
   //Serial.printf("MHI_AC_Ctrl_Core::set_troom %i\n", troom);
   new_Troom = troom;
@@ -181,6 +185,14 @@ int MHI_AC_Ctrl_Core::loop(uint max_time_ms) {
       MISO_frame[DB9] = 0x45;
       request_erropData = false;
     }
+    // This would be a nice place to call Opdata update 
+    if(request_OpStatus){
+      m_cbiStatus->cbiStatusFunction(status_troom, status_troom_old);
+      m_cbiStatus->cbiStatusFunction(status_tsetpoint, status_tsetpoint_old);
+      m_cbiStatus->cbiStatusFunction(status_power, status_power_old);
+      m_cbiStatus->cbiStatusFunction(status_mode, status_mode_old);
+    }
+
   }
 
   MISO_frame[DB3] = new_Troom;  // from MQTT or DS18x20
