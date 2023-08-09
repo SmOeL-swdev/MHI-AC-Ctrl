@@ -137,6 +137,11 @@ void publish_cmd_unknown() {
 void publish_cmd_invalidparameter() {
   output_P((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_INVALID_PARAMETER));
 }
+// Publish the AC mode of operation state over MQTT so that other systems can syncronize with MHI-AC-ctrl
+void publish_ac_state_update() {
+
+
+}
 
 void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
   const int mqtt_topic_size = 100;

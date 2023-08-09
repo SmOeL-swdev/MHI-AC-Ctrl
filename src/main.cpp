@@ -160,7 +160,8 @@ void MQTT_subscribe_callback(const char* topic, byte* payload, unsigned int leng
   else{
     publish_cmd_unknown();
   }
-  //After this incredible else-if-else spaghetti we might want to update all pub-topics so that all listners are synced again! <-- with regards, SmOel
+  //After this incredible else-if-else spaghetti we might want to update all pub-topics so that all listners are synced again! 
+  mhi_ac_ctrl_core.request_OpData();
 }
 
 class StatusHandler : public CallbackInterface_Status {
@@ -185,7 +186,7 @@ class StatusHandler : public CallbackInterface_Status {
             Serial.printf("power_status: unknown; received status_power: %i\n", value);
             if (value == power_off) {  // Only when status is power off, set fan to Auto. 
               Serial.println("Set fan to Auto to fix fan status after powerdown (230V) AC");
-              mhi_ac_ctrl_core. set_fan(7);
+              mhi_ac_ctrl_core.set_fan(7);
             }
           } else if (power_status == off) 
             Serial.printf("power_status: off; received status_power: %i\n", value);
@@ -282,7 +283,7 @@ class StatusHandler : public CallbackInterface_Status {
         case status_troom:
           {
             int8_t troom_diff = value - status_troom_old; // avoid using other functions inside the brackets of abs, see https://www.arduino.cc/reference/en/language/functions/math/abs/
-            if (abs(troom_diff) > TROOM_FILTER_LIMIT/0.25f) { // Room temperature delta > 0.25°C
+            if (abs(troom_diff) > TROOM_FILTER_LIMIT/0.25f || mhi_ac_ctrl_core.get_request_OpData()) { // Room temperature delta > 0.25°C or request for mqtt update
               status_troom_old = value;
               dtostrf((value - 61) / 4.0, 0, 2, strtmp);
               output_P(status, PSTR(TOPIC_TROOM), strtmp);
@@ -436,7 +437,7 @@ void loop() {
   }
   else {
     //Serial.printf("loop: WiFi.status()=%i\n", WiFi.status()); // see https://realglitch.com/2018/07/arduino-wifi-status-codes/
-    myWebServer.Handle();
+    myWebServer.Handle(); 
     MQTTStatus=MQTTreconnect();
     if (MQTTStatus == MQTT_RECONNECTED){
       Serial.println("Resetting old values MHI");
@@ -477,7 +478,7 @@ void loop() {
   if((MQTTStatus==MQTT_RECONNECTED) || (MQTTStatus==MQTT_CONNECT_OK)){
 #endif    
     //Serial.println("MQTT connected in main loop");
-    int ret = mhi_ac_ctrl_core.loop(60);
+    int ret = mhi_ac_ctrl_core.loop(80);
     if (ret < 0)
       Serial.printf_P(PSTR("mhi_ac_ctrl_core.loop error: %i\n"), ret);
 #ifndef CONTINUE_WITHOUT_MQTT 
