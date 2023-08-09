@@ -160,7 +160,7 @@ void MQTT_subscribe_callback(const char* topic, byte* payload, unsigned int leng
   else{
     publish_cmd_unknown();
   }
-  //After this incredible else-if-else spaghetti we might want to update all pub-topics so that all listners are synced again! <-- with regards, SmOel
+  //After this incredible else-if-else spaghetti we might want to update all pub-topics so that all listners are synced again! 
   mhi_ac_ctrl_core.request_OpData();
 }
 

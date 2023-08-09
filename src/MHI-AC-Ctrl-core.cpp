@@ -197,7 +197,6 @@ int MHI_AC_Ctrl_Core::loop(uint max_time_ms) {
       m_cbiStatus->cbiStatusFunction(status_power, status_power_old);       // power should be send after mode
       m_cbiStatus->cbiStatusFunction(status_fan, status_fan_old);
       m_cbiStatus->cbiStatusFunction(status_vanes, status_vanes_old);
-
       request_OpStatus = false;
     }
 

@@ -154,7 +154,7 @@ class MHI_AC_Ctrl_Core {
     void set_troom(byte temperature);     // set the room temperature used by AC (0xff indicates the usage of the internal room temperature sensor)
     void request_ErrOpData();             // request that the AC provides the error data
     void request_OpData();                // request that the AC provides the Operational data
-    bool get_request_OpData();
+    bool get_request_OpData();            // get boolean status if operational data is to be requested
     float get_troom_offset();             // get troom offset, only usefull when ENHANCED_RESOLUTION is used
     void set_troom_offset(float offset);  // set troom offset, only usefull when ENHANCED_RESOLUTION is used
 
