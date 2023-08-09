@@ -161,7 +161,7 @@ void MQTT_subscribe_callback(const char* topic, byte* payload, unsigned int leng
     publish_cmd_unknown();
   }
   //After this incredible else-if-else spaghetti we might want to update all pub-topics so that all listners are synced again! <-- with regards, SmOel
-  //mhi_ac_ctrl_core.MHIAcCtrlStatus
+  mhi_ac_ctrl_core.request_OpData();
 }
 
 class StatusHandler : public CallbackInterface_Status {
@@ -283,7 +283,7 @@ class StatusHandler : public CallbackInterface_Status {
         case status_troom:
           {
             int8_t troom_diff = value - status_troom_old; // avoid using other functions inside the brackets of abs, see https://www.arduino.cc/reference/en/language/functions/math/abs/
-            if (abs(troom_diff) > TROOM_FILTER_LIMIT/0.25f) { // Room temperature delta > 0.25°C
+            if (abs(troom_diff) > TROOM_FILTER_LIMIT/0.25f || mhi_ac_ctrl_core.get_request_OpData()) { // Room temperature delta > 0.25°C or request for mqtt update
               status_troom_old = value;
               dtostrf((value - 61) / 4.0, 0, 2, strtmp);
               output_P(status, PSTR(TOPIC_TROOM), strtmp);

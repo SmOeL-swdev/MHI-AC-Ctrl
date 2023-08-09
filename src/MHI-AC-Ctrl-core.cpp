@@ -85,6 +85,10 @@ void MHI_AC_Ctrl_Core::request_OpData(){
   request_OpStatus = true;
 }
 
+bool MHI_AC_Ctrl_Core::get_request_OpData(){
+  return request_OpStatus;
+}
+
 void MHI_AC_Ctrl_Core::set_troom(byte troom) {
   //Serial.printf("MHI_AC_Ctrl_Core::set_troom %i\n", troom);
   new_Troom = troom;
@@ -189,8 +193,12 @@ int MHI_AC_Ctrl_Core::loop(uint max_time_ms) {
     if(request_OpStatus){
       m_cbiStatus->cbiStatusFunction(status_troom, status_troom_old);
       m_cbiStatus->cbiStatusFunction(status_tsetpoint, status_tsetpoint_old);
-      m_cbiStatus->cbiStatusFunction(status_power, status_power_old);
-      m_cbiStatus->cbiStatusFunction(status_mode, status_mode_old);
+      m_cbiStatus->cbiStatusFunction(status_mode, status_mode_old);         // mode should be send before power
+      m_cbiStatus->cbiStatusFunction(status_power, status_power_old);       // power should be send after mode
+      m_cbiStatus->cbiStatusFunction(status_fan, status_fan_old);
+      m_cbiStatus->cbiStatusFunction(status_vanes, status_vanes_old);
+
+      request_OpStatus = false;
     }
 
   }
