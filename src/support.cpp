@@ -71,9 +71,8 @@ void initWiFi(){
   wifiManager.setConfigPortalTimeout(180);
   wifiManager.autoConnect(nodeID.c_str(), WIFI_PASSWORD);
 
-  WiFi.setAutoReconnect(true);
-  WiFi.persistent(true);
-
+  //WiFi.setAutoReconnect(true);
+  //WiFi.persistent(true);
   //wifiManager.resetSettings();
 }
 
