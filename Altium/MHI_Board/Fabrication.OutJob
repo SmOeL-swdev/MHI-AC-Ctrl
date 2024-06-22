@@ -131,7 +131,7 @@ Configuration7_Item1=Record=ExportSTEPView|ExportComponentOptions=0|ExportModels
 [PublishSettings]
 OutputFilePath2=
 ReleaseManaged2=1
-OutputBasePath2=Project Outputs for MountPCB
+OutputBasePath2=Project Outputs for MHI_Board
 OutputPathMedia2=
 OutputPathMediaValue2=
 OutputPathOutputer2=[Output Type]
@@ -156,12 +156,12 @@ ShowComponentParameters2=1
 GlobalBookmarks2=0
 PDFACompliance2=Disabled
 PDFVersion2=Default
-OutputFilePath3=C:\projects\KosseElectronics\SmartSwitch\HW\MountPCB_CMFiles\Project Outputs for MountPCB\
+OutputFilePath3=C:\projects\KosseElectronics\MHI-AC\MHI-AC-Ctrl\Altium\MHI_Board\Project Outputs for MHI_Board\ProjNr\
 ReleaseManaged3=1
-OutputBasePath3=Project Outputs for MountPCB
-OutputPathMedia3=
-OutputPathMediaValue3=
-OutputPathOutputer3=[Output Type]
+OutputBasePath3=Project Outputs for MHI_Board
+OutputPathMedia3==ProjNr
+OutputPathMediaValue3==ProjNr
+OutputPathOutputer3=
 OutputPathOutputerPrefix3=
 OutputPathOutputerValue3=
 OutputFileName3=
@@ -171,7 +171,7 @@ OutputFileNameSpecial3=
 OpenOutput3=1
 OutputFilePath4=
 ReleaseManaged4=1
-OutputBasePath4=Project Outputs for MountPCB
+OutputBasePath4=Project Outputs for MHI_Board
 OutputPathMedia4=
 OutputPathMediaValue4=
 OutputPathOutputer4=[Output Type]
@@ -210,7 +210,7 @@ WmvQuality4=80
 [GeneratedFilesSettings]
 RelativeOutputPath2=
 OpenOutputs2=1
-RelativeOutputPath3=C:\projects\KosseElectronics\SmartSwitch\HW\MountPCB_CMFiles\Project Outputs for MountPCB\
+RelativeOutputPath3=C:\projects\KosseElectronics\MHI-AC\MHI-AC-Ctrl\Altium\MHI_Board\Project Outputs for MHI_Board\ProjNr\
 OpenOutputs3=1
 AddToProject3=1
 TimestampFolder3=0
