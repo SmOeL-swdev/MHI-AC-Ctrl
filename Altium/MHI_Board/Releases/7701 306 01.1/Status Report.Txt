@@ -1,0 +1,10 @@
+Output: ExportSTEP
+Type  : ExportSTEP
+From  : Variant [[No Variations]] of PCB Document [MHI_Board.PcbDoc]
+   Generated File[MHI_Board.step]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 15:09:04 On 6/22/2024
