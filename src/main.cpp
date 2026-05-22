@@ -15,7 +15,8 @@ unsigned long room_temp_set_timeout_Millis = millis();
 bool troom_was_set_by_MQTT = false;
 //static int WiFiStatus = WIFI_CONNECT_TIMEOUT;   // start connecting to WiFi
 static int MQTTStatus = MQTT_NOT_CONNECTED;
-static unsigned long previousMillis = millis();
+static unsigned long SYSTEM_TIMER = millis();
+
 #if TEMP_MEASURE_PERIOD > 0
   static byte ds18x20_value_old = 0;
 #endif
@@ -423,7 +424,7 @@ void setup() {
   Serial.println(IPmessage + WiFi.localIP().toString());
   myWebServer.Init();
   Serial.println("Setup done..."); 
-  previousMillis = millis();
+  SYSTEM_TIMER = millis();
 }
 
 
@@ -442,10 +443,15 @@ void loop() {
     if (MQTTStatus == MQTT_RECONNECTED){
       Serial.println("Resetting old values MHI");
       mhi_ac_ctrl_core.reset_old_values();  // after a reconnect.
-    }
-    //ArduinoOTA.handle();
-    
+    }    
   }
+  if(millis()- SYSTEM_TIMER >= MQTT_UPDATE_INTERVAL_TIME*1000){
+    // regular update MQTT transmission
+    mhi_ac_ctrl_core.request_OpData();
+    SYSTEM_TIMER = millis();
+
+  }
+
 
   
 #if TEMP_MEASURE_PERIOD > 0

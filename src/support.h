@@ -31,6 +31,8 @@
 #define ONE_WIRE_BUS 4                              // D2, PIN for connecting temperature sensor DS18x20 DQ pin
 #define ROOM_TEMP_DS18X20_OFFSET 0.0                // Temperature offset for DS18x20 sensor, can be positive or negative (examples: 0.0, -1.0, 1.5)
 
+#define MQTT_UPDATE_INTERVAL_TIME  300              // time in seconds to update MHI-AC status over MQTT
+
 //#define ROOM_TEMP_DS18X20                           // use room temperature from DS18x20
 
 #define ROOM_TEMP_MQTT_SET_TIMEOUT  40              // time in seconds, after this time w/o receiving a valid room temperature
