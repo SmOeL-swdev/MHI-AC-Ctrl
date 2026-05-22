@@ -129,6 +129,34 @@ void MQTT_subscribe_callback(const char* topic, byte* payload, unsigned int leng
         publish_cmd_invalidparameter();
     }
   }
+#ifdef USE_EXTENDED_FRAME_SIZE
+  else if (strcmp_P(topic, PSTR(MQTT_SET_PREFIX TOPIC_VANESLR)) == 0) {
+    if (strcmp_P((char*)payload, PSTR(PAYLOAD_VANESLR_SWING)) == 0) {
+      mhi_ac_ctrl_core.set_vanesLR(vanesLR_swing);
+      publish_cmd_ok();
+    }
+    else {
+      if ((atoi((char*)payload) >= 1) & (atoi((char*)payload) <= 7)) {
+        mhi_ac_ctrl_core.set_vanesLR(atoi((char*)payload));
+        publish_cmd_ok();
+      }
+      else
+        publish_cmd_invalidparameter();
+    }
+  }
+  else if (strcmp_P(topic, PSTR(MQTT_SET_PREFIX TOPIC_3DAUTO)) == 0) {
+    if (strcmp_P((char*)payload, PSTR(PAYLOAD_3DAUTO_ON)) == 0) {
+      mhi_ac_ctrl_core.set_3Dauto(Dauto_on);
+      publish_cmd_ok();
+    }
+    else if (strcmp_P((char*)payload, PSTR(PAYLOAD_3DAUTO_OFF)) == 0) {
+      mhi_ac_ctrl_core.set_3Dauto(Dauto_off);
+      publish_cmd_ok();
+    }
+    else
+      publish_cmd_invalidparameter();
+  }
+#endif
   else if (strcmp_P(topic, PSTR(MQTT_SET_PREFIX TOPIC_TROOM)) == 0) {
     float f=atof((char*)payload);
 #ifdef ENHANCED_RESOLUTION
@@ -281,6 +309,28 @@ class StatusHandler : public CallbackInterface_Status {
               output_P(status, PSTR(TOPIC_VANES), strtmp);
           }
           break;
+#ifdef USE_EXTENDED_FRAME_SIZE
+        case status_vanesLR:
+          switch (value) {
+            case vanesLR_swing:
+              output_P(status, PSTR(TOPIC_VANESLR), PSTR(PAYLOAD_VANESLR_SWING));
+              break;
+            default:
+              itoa(value, strtmp, 10);
+              output_P(status, PSTR(TOPIC_VANESLR), strtmp);
+          }
+          break;
+        case status_3Dauto:
+          switch (value) {
+            case Dauto_on:
+              output_P(status, PSTR(TOPIC_3DAUTO), PSTR(PAYLOAD_3DAUTO_ON));
+              break;
+            case Dauto_off:
+              output_P(status, PSTR(TOPIC_3DAUTO), PSTR(PAYLOAD_3DAUTO_OFF));
+              break;
+          }
+          break;
+#endif
         case status_troom:
           {
             int8_t troom_diff = value - status_troom_old; // avoid using other functions inside the brackets of abs, see https://www.arduino.cc/reference/en/language/functions/math/abs/
@@ -419,6 +469,9 @@ void setup() {
   MQTTclient.setCallback(MQTT_subscribe_callback);
   mhi_ac_ctrl_core.MHIAcCtrlStatus(&mhiStatusHandler);
   mhi_ac_ctrl_core.init();
+#ifdef USE_EXTENDED_FRAME_SIZE
+  mhi_ac_ctrl_core.set_frame_size(33);
+#endif
   // mhi_ac_ctrl_core.set_fan(7); // set fan AUTO, see https://github.com/absalom-muc/MHI-AC-Ctrl/issues/99
   String IPmessage = "IP Address: " ;
   Serial.println(IPmessage + WiFi.localIP().toString());
