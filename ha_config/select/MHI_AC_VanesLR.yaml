@@ -1,0 +1,17 @@
+# MHI-AC Horizontal Vanes (Left/Right) select entity
+# Place in mqtt/select/ folder (included via !include_dir_merge_list)
+# Requires USE_EXTENDED_FRAME_SIZE enabled in firmware support.h
+- name: "MHI-AC Vanes LR"
+  unique_id: "MHI_VanesLR"
+  state_topic: "MHI-AC/VanesLR"
+  command_topic: "MHI-AC/set/VanesLR"
+  options:
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+    - "6"
+    - "7"
+    - "Swing"
+  icon: "mdi:swap-horizontal"

@@ -1,5 +1,7 @@
+# MHI-AC Climate entity
+# Place in mqtt/airco/ folder (included via !include_dir_merge_list)
 - name: "MHI-AC"
-  unique_id: MHI_Kamer
+  unique_id: "MHI_Kamer"
   initial: 20
   min_temp: 18
   max_temp: 30
@@ -15,7 +17,6 @@
     - "2"
     - "3"
     - "4"
-    - "?"
     - "Swing"
   fan_modes:
     - "1"
@@ -24,41 +25,36 @@
     - "4"
     - "Auto"
   power_command_topic: "MHI-AC/set/Power"
- # payload_on: "On"
- # payload_off: "Off"
-  power_state_topic: "MHI-AC/Power"
- # payload_on: "On"
- # payload_off: "Off"
   mode_command_topic: "MHI-AC/set/Mode"
   mode_command_template: >
     {% if value == "auto" %}
-        Auto 
-    {% elif value == "dry" %} 
+        Auto
+    {% elif value == "dry" %}
         Dry
-    {% elif value == "cool" %} 
+    {% elif value == "cool" %}
         Cool
-    {% elif value == "fan_only" %} 
+    {% elif value == "fan_only" %}
         Fan
-    {% elif value == "heat" %} 
+    {% elif value == "heat" %}
         Heat
-    {% elif value == "off" %} 
+    {% elif value == "off" %}
         Off
     {% else %}
         -1
     {% endif %}
   mode_state_topic: "MHI-AC/Mode"
-  mode_state_template: > 
+  mode_state_template: >
     {% if value == "Auto" %}
-        auto 
-    {% elif value == "Dry" %} 
+        auto
+    {% elif value == "Dry" %}
         dry
-    {% elif value == "Cool" %} 
+    {% elif value == "Cool" %}
         cool
-    {% elif value == "Fan" %} 
+    {% elif value == "Fan" %}
         fan_only
-    {% elif value == "Heat" %} 
+    {% elif value == "Heat" %}
         heat
-    {% elif value == "Off" %} 
+    {% elif value == "Off" %}
         off
     {% else %}
         -1

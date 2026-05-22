@@ -1,0 +1,10 @@
+# MHI-AC 3D Auto mode switch entity
+# Place in mqtt/switch/ folder (included via !include_dir_merge_list)
+# Requires USE_EXTENDED_FRAME_SIZE enabled in firmware support.h
+- name: "MHI-AC 3D Auto"
+  unique_id: "MHI_3Dauto"
+  state_topic: "MHI-AC/3Dauto"
+  command_topic: "MHI-AC/set/3Dauto"
+  payload_on: "On"
+  payload_off: "Off"
+  icon: "mdi:rotate-3d-variant"
