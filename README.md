@@ -59,7 +59,46 @@ This Software based SPI is reliable and the performance of the ESP8266 is suffic
 In case of problems please check the [Troubleshooting guide](Troubleshooting.md).
 
 ## Setting up Home-Assistant configuration 
-:construction_worker: Future improvement of the manual how this needs to be set-up :construction_worker:
+This project provides example YAML configurations for Home Assistant's MQTT integration.  
+The files in [`ha_config/`](ha_config/) are structured for HA's `!include_dir_merge_list` pattern — one file per entity type, one folder per MQTT platform.
+
+### Folder structure
+```
+ha_config/
+├── airco/
+│   └── MHI_AC_General.yaml    # Climate entity (modes, fan, vertical vanes)
+├── select/
+│   └── MHI_AC_VanesLR.yaml    # Horizontal vanes select (positions 1-7 + Swing)
+└── switch/
+    └── MHI_AC_3Dauto.yaml     # 3D Auto mode switch (On/Off)
+```
+
+### configuration.yaml integration
+Copy the folders to your HA config directory (e.g. as `mqtt/airco/`, `mqtt/select/`, `mqtt/switch/`) and add:
+
+```yaml
+mqtt:
+  climate: !include_dir_merge_list ./mqtt/airco
+  select: !include_dir_merge_list ./mqtt/select
+  switch: !include_dir_merge_list ./mqtt/switch
+  # ... your other entity types ...
+```
+
+### VanesLR & 3D Auto (extended features)
+The horizontal vanes (VanesLR) and 3D Auto entities require the extended 33-byte SPI frame.  
+To enable in the firmware, uncomment the following line in [`src/support.h`](src/support.h):
+
+```c
+#define USE_EXTENDED_FRAME_SIZE true
+```
+
+| Entity | Type | MQTT State Topic | MQTT Command Topic | Values |
+|--------|------|------------------|--------------------|--------|
+| Vertical Vanes | climate swing_mode | `MHI-AC/Vanes` | `MHI-AC/set/Vanes` | 1, 2, 3, 4, Swing |
+| Horizontal Vanes (LR) | select | `MHI-AC/VanesLR` | `MHI-AC/set/VanesLR` | 1–7, Swing |
+| 3D Auto | switch | `MHI-AC/3Dauto` | `MHI-AC/set/3Dauto` | On, Off |
+
+> **Note:** HA's MQTT Climate entity supports only one swing axis natively (`swing_mode`), which is used for the vertical vanes (Up/Down). The horizontal vanes are exposed as a separate `select` entity.
 
 # Enhancement
 If you are interested to have a deeper look on the SPI protocol or want to trace the SPI signals, please check [MHI-AC-Trace](https://github.com/absalom-muc/MHI-AC-Trace). But this is not needed for the standard user of MHI-AC-Ctrl. :construction_worker: I probably will have a look into this for future improvement.
