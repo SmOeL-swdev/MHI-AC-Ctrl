@@ -92,6 +92,11 @@ int MQTTreconnect() {
       Serial.println((" connected"));
       Serial.printf("MQTTclient.connected=%i\n", MQTTclient.connected());
       reconnect_trials=0;
+
+#ifdef USE_HA_DISCOVERY
+      publishHADiscovery();
+#endif
+
       output_P((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
       output_P((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
 
@@ -141,6 +146,152 @@ void publish_ac_state_update() {
 
 
 }
+
+#ifdef USE_HA_DISCOVERY
+#include <ArduinoJson.h>
+
+static bool publishJsonRetained(const char* topic, DynamicJsonDocument& doc) {
+  unsigned int len = measureJson(doc);
+  if (MQTTclient.beginPublish(topic, len, true)) {
+    serializeJson(doc, MQTTclient);
+    return MQTTclient.endPublish();
+  }
+  return false;
+}
+
+void publishHADiscovery() {
+  if (!MQTTclient.connected()) return;
+
+  // --- Climate entity discovery ---
+  {
+    DynamicJsonDocument doc(2560);
+
+    doc["name"] = HOSTNAME;
+    doc["unique_id"] = String(HOSTNAME) + "_climate";
+    doc["object_id"] = String(HOSTNAME) + "_climate";
+
+    // Modes
+    JsonArray modes = doc.createNestedArray("modes");
+    modes.add("auto");
+    modes.add("dry");
+    modes.add("cool");
+    modes.add("fan_only");
+    modes.add("heat");
+    modes.add("off");
+    doc["mode_command_topic"] = MQTT_SET_PREFIX TOPIC_MODE;
+    doc["mode_state_topic"] = MQTT_PREFIX TOPIC_MODE;
+    doc["mode_command_template"] = "{{ {'auto':'Auto','dry':'Dry','cool':'Cool','fan_only':'Fan','heat':'Heat','off':'Off'}[value] }}";
+    doc["mode_state_template"] = "{{ {'Auto':'auto','Dry':'dry','Cool':'cool','Fan':'fan_only','Heat':'heat','Off':'off','Stop':'off'}.get(value, 'off') }}";
+
+    // Power
+    doc["power_command_topic"] = MQTT_SET_PREFIX TOPIC_POWER;
+    doc["payload_on"] = PAYLOAD_POWER_ON;
+    doc["payload_off"] = PAYLOAD_POWER_OFF;
+
+    // Temperature
+    doc["temperature_command_topic"] = MQTT_SET_PREFIX TOPIC_TSETPOINT;
+    doc["temperature_state_topic"] = MQTT_PREFIX TOPIC_TSETPOINT;
+    doc["current_temperature_topic"] = MQTT_PREFIX TOPIC_TROOM;
+    doc["min_temp"] = 18;
+    doc["max_temp"] = 30;
+    doc["precision"] = 0.5;
+    doc["temperature_unit"] = "C";
+
+    // Fan
+    JsonArray fan_modes = doc.createNestedArray("fan_modes");
+    fan_modes.add("1");
+    fan_modes.add("2");
+    fan_modes.add("3");
+    fan_modes.add("4");
+    fan_modes.add("Auto");
+    doc["fan_mode_command_topic"] = MQTT_SET_PREFIX TOPIC_FAN;
+    doc["fan_mode_state_topic"] = MQTT_PREFIX TOPIC_FAN;
+
+    // Vertical vanes (UD)
+    JsonArray swing_modes = doc.createNestedArray("swing_modes");
+    swing_modes.add("Up");
+    swing_modes.add("Up/Center");
+    swing_modes.add("Center/Down");
+    swing_modes.add("Down");
+    swing_modes.add("Swing");
+    doc["swing_mode_command_topic"] = MQTT_SET_PREFIX TOPIC_VANES;
+    doc["swing_mode_state_topic"] = MQTT_PREFIX TOPIC_VANES;
+    doc["swing_mode_command_template"] = "{{ {'Up':'1','Up/Center':'2','Center/Down':'3','Down':'4','Swing':'Swing'}[value] }}";
+    doc["swing_mode_state_template"] = "{{ {'1':'Up','2':'Up/Center','3':'Center/Down','4':'Down','Swing':'Swing'}.get(value, value) }}";
+
+#ifdef USE_EXTENDED_FRAME_SIZE
+    // Horizontal vanes (LR)
+    JsonArray swing_h_modes = doc.createNestedArray("swing_horizontal_modes");
+    swing_h_modes.add("Left");
+    swing_h_modes.add("Left/Center");
+    swing_h_modes.add("Center");
+    swing_h_modes.add("Center/Right");
+    swing_h_modes.add("Right");
+    swing_h_modes.add("Wide");
+    swing_h_modes.add("Spot");
+    swing_h_modes.add("Swing");
+    doc["swing_horizontal_mode_command_topic"] = MQTT_SET_PREFIX TOPIC_VANESLR;
+    doc["swing_horizontal_mode_state_topic"] = MQTT_PREFIX TOPIC_VANESLR;
+    doc["swing_horizontal_mode_command_template"] = "{{ {'Left':'1','Left/Center':'2','Center':'3','Center/Right':'4','Right':'5','Wide':'6','Spot':'7','Swing':'Swing'}[value] }}";
+    doc["swing_horizontal_mode_state_template"] = "{{ {'1':'Left','2':'Left/Center','3':'Center','4':'Center/Right','5':'Right','6':'Wide','7':'Spot','Swing':'Swing'}.get(value, value) }}";
+#endif
+
+    // Availability (uses existing LWT)
+    doc["availability_topic"] = MQTT_PREFIX TOPIC_CONNECTED;
+    doc["payload_available"] = PAYLOAD_CONNECTED_TRUE;
+    doc["payload_not_available"] = PAYLOAD_CONNECTED_FALSE;
+
+    // Device info
+    JsonObject device = doc.createNestedObject("device");
+    device.createNestedArray("identifiers").add(HOSTNAME);
+    device["name"] = HOSTNAME;
+    device["manufacturer"] = "Mitsubishi Heavy Industries";
+    device["sw_version"] = VERSION;
+
+    String topic = String("homeassistant/climate/") + HOSTNAME + "/config";
+    if (publishJsonRetained(topic.c_str(), doc)) {
+      Serial.println(F("HA Discovery: climate entity published"));
+    } else {
+      Serial.printf_P(PSTR("HA Discovery: climate FAILED (json=%u bytes)\n"), measureJson(doc));
+    }
+  }
+
+#ifdef USE_EXTENDED_FRAME_SIZE
+  // --- 3D Auto switch entity discovery ---
+  {
+    DynamicJsonDocument doc(512);
+
+    doc["name"] = String(HOSTNAME) + " 3D Auto";
+    doc["unique_id"] = String(HOSTNAME) + "_3Dauto";
+    doc["object_id"] = String(HOSTNAME) + "_3Dauto";
+    doc["command_topic"] = MQTT_SET_PREFIX TOPIC_3DAUTO;
+    doc["state_topic"] = MQTT_PREFIX TOPIC_3DAUTO;
+    doc["payload_on"] = PAYLOAD_3DAUTO_ON;
+    doc["payload_off"] = PAYLOAD_3DAUTO_OFF;
+    doc["icon"] = "mdi:rotate-3d-variant";
+
+    // Availability
+    doc["availability_topic"] = MQTT_PREFIX TOPIC_CONNECTED;
+    doc["payload_available"] = PAYLOAD_CONNECTED_TRUE;
+    doc["payload_not_available"] = PAYLOAD_CONNECTED_FALSE;
+
+    // Same device (groups with climate entity)
+    JsonObject device = doc.createNestedObject("device");
+    device.createNestedArray("identifiers").add(HOSTNAME);
+    device["name"] = HOSTNAME;
+
+    String topic = String("homeassistant/switch/") + HOSTNAME + "-3Dauto/config";
+    if (publishJsonRetained(topic.c_str(), doc)) {
+      Serial.println(F("HA Discovery: 3D Auto switch published"));
+    } else {
+      Serial.printf_P(PSTR("HA Discovery: 3D Auto FAILED (json=%u bytes)\n"), measureJson(doc));
+    }
+  }
+#endif
+
+  Serial.println(F("HA Discovery: complete"));
+}
+#endif
 
 void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
   const int mqtt_topic_size = 100;

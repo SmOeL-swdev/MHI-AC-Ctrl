@@ -51,6 +51,8 @@
                                                     // When ROOM_TEMP_DS18X20 is used, it will use room temperature from DS18x20
 //#define USE_EXTENDED_FRAME_SIZE true                // uncomment if you want to use the extended frame size (33) which is used by the WF-RAC module
                                                     // Then it will be possible to get and set the 3D auto and vanes left/right
+#define USE_HA_DISCOVERY true                       // uncomment to enable Home Assistant MQTT Auto-Discovery
+                                                    // HA will auto-create climate entity with all controls (no manual YAML needed)
 
 
 
@@ -81,6 +83,9 @@ void publish_cmd_ok();                                        // last MQTT cmd w
 void publish_cmd_unknown();                                   // last MQTT cmd was unknown
 void publish_cmd_invalidparameter();                          // a paramter of the last MQTT was wrong
 void output_P(ACStatus status, PGM_P topic, PGM_P payload);   // publish via MQTT
+#ifdef USE_HA_DISCOVERY
+void publishHADiscovery();                                    // publish HA MQTT Auto-Discovery payloads
+#endif
 
 void setupOTA();                                              // initialize and start OTA
 void setup_ds18x20();                                         // setup the temperature measurement
