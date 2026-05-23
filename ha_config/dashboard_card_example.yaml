@@ -1,0 +1,37 @@
+# MHI-AC Dashboard Card Example
+# Copy this into your HA dashboard (Edit Dashboard → Add Card → Manual YAML)
+# This groups the climate entity with VanesLR and 3D Auto into one panel
+
+type: vertical-stack
+cards:
+  - type: thermostat
+    entity: climate.mhi_ac
+    features:
+      - type: climate-hvac-modes
+        hvac_modes:
+          - auto
+          - cool
+          - heat
+          - dry
+          - fan_only
+          - "off"
+      - type: climate-fan-modes
+        fan_modes:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - Auto
+      - type: climate-swing-modes
+        swing_modes:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - Swing
+  - type: entities
+    entities:
+      - entity: select.mhi_ac_vanes_lr
+        name: "Horizontal Vanes (L/R)"
+      - entity: switch.mhi_ac_3d_auto
+        name: "3D Auto"
