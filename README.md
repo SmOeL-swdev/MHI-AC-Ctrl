@@ -5,7 +5,7 @@ Repo is cloned and forked from previous builds and Platform IO enabled. This mak
 
 **The current version does no longer require manual integration of yaml files in HA. It also creates a control panel where vanes can be set with logical names.**
 
-<img src="/images/HA-MHI-DashBoardControl.png" width=650 align="left" />
+<img src="images/HA-MHI-DashboardControl.png" width=650 align="left" />
 
 # Attention:
 **warning:** You have to open the indoor unit to have access to the SPI. Opening of the indoor unit should be done by 
