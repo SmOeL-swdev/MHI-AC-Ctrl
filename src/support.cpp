@@ -97,7 +97,8 @@ int MQTTreconnect() {
       publishHADiscovery();
 #endif
 
-      output_P((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
+      // Publish availability as retained (must match LWT retain flag for HA discovery)
+      MQTTclient.publish(MQTT_PREFIX TOPIC_CONNECTED, PAYLOAD_CONNECTED_TRUE, true);
       output_P((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
 
       itoa(WiFi.RSSI(), strtmp, 10);

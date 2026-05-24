@@ -1,5 +1,9 @@
-# MHI-AC 3D Auto mode switch entity
-# Place in mqtt/switch/ folder (included via !include_dir_merge_list)
+# MHI-AC 3D Auto mode switch entity (REFERENCE ONLY)
+#
+# NOTE: When USE_HA_DISCOVERY is enabled (default), 3D Auto is auto-discovered
+# as a switch entity. This file is NOT needed.
+# Remove from your mqtt/switch/ folder to avoid duplicate entities.
+#
 # Requires USE_EXTENDED_FRAME_SIZE enabled in firmware support.h
 - name: "MHI-AC 3D Auto"
   unique_id: "MHI_3Dauto"

@@ -1,5 +1,10 @@
-# MHI-AC Climate entity
-# Place in mqtt/airco/ folder (included via !include_dir_merge_list)
+# MHI-AC Climate entity (MANUAL CONFIGURATION - REFERENCE ONLY)
+#
+# NOTE: When USE_HA_DISCOVERY is enabled in the firmware (default), this file
+# is NOT needed. HA will auto-discover the climate entity with all controls.
+# Remove this file from your mqtt/airco/ folder to avoid duplicate entities.
+#
+# Only use this manual config if you disable USE_HA_DISCOVERY in support.h.
 - name: "MHI-AC"
   unique_id: "MHI_Kamer"
   initial: 20
